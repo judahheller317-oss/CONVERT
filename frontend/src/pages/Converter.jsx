@@ -118,13 +118,6 @@ export default function Converter() {
               <p className="font-mono-ae text-[10px] tracking-[0.3em] text-slate-500 uppercase">Converter</p>
             </div>
           </div>
-          <button
-            onClick={() => window.open(`${API}/sample`, "_blank")}
-            data-testid="download-sample-button"
-            className="font-mono-ae text-xs uppercase tracking-wider text-slate-400 hover:text-white transition-colors"
-          >
-            Get sample .aepx →
-          </button>
         </div>
       </header>
 
@@ -132,7 +125,7 @@ export default function Converter() {
         {/* Hero */}
         <div className="max-w-3xl mx-auto text-center fade-up">
           <span className="inline-flex items-center gap-2 font-mono-ae text-[11px] tracking-[0.3em] uppercase text-slate-300 border border-white/15 rounded-full px-4 py-1.5 glow-ring">
-            <Sparkles className="h-3.5 w-3.5" /> XML project downgrader
+            <Sparkles className="h-3.5 w-3.5" /> AE Project File Converter
           </span>
           <h1 className="font-display font-extrabold tracking-tight leading-[0.95] text-4xl sm:text-5xl md:text-6xl mt-7">
             Downgrade your <span className="text-glow">After Effects</span> projects.
@@ -158,7 +151,7 @@ export default function Converter() {
               onDrop={onDrop}
               className={`relative overflow-hidden cursor-pointer glass h-full min-h-[280px] px-8 py-16 flex flex-col items-center justify-center text-center transition-all duration-300 ${
                 dragging ? "border-white/60 glow-ring scale-[1.01]" : "hover:border-white/30"
-              } ${!file ? "scan-line" : ""}`}
+              } ${!file ? "scan-removed" : ""}`}
             >
               <input
                 ref={inputRef}
@@ -259,9 +252,44 @@ export default function Converter() {
       </main>
 
       <footer className="relative z-10 border-t border-white/10 mt-20">
-        <div className="max-w-6xl mx-auto px-6 md:px-10 py-8 font-mono-ae text-xs text-slate-600 flex flex-col sm:flex-row gap-2 justify-between">
-          <span>Skillzycord Converter — unofficial. Adobe &amp; After Effects are trademarks of Adobe Inc.</span>
-          <span>Temp files auto-deleted after 1 hour.</span>
+        <div className="max-w-6xl mx-auto px-6 md:px-10 py-10 flex flex-col items-center gap-5">
+          <div className="text-center">
+            <p className="font-display font-bold text-lg tracking-tight text-glow">Created by Skillzy</p>
+            <p className="font-mono-ae text-[11px] tracking-[0.25em] uppercase text-slate-500 mt-1">Follow for more</p>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <a
+              href="https://www.tiktok.com/t/ZTSrVr9qv/"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="credit-tiktok"
+              className="btn-ghost font-mono-ae text-xs uppercase tracking-wider px-5 py-2.5 text-slate-200 hover:text-white"
+            >
+              TikTok
+            </a>
+            <a
+              href="https://youtube.com/@skillzyaep?si=mUzjjyZ7jApswO8t"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="credit-youtube"
+              className="btn-ghost font-mono-ae text-xs uppercase tracking-wider px-5 py-2.5 text-slate-200 hover:text-white"
+            >
+              YouTube
+            </a>
+            <a
+              href="https://discord.gg/skillzycord-1290154404908896266"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="credit-discord"
+              className="btn-ghost font-mono-ae text-xs uppercase tracking-wider px-5 py-2.5 text-slate-200 hover:text-white"
+            >
+              Discord
+            </a>
+          </div>
+          <div className="font-mono-ae text-xs text-slate-600 flex flex-col sm:flex-row gap-2 justify-between w-full pt-4 border-t border-white/5 text-center sm:text-left">
+            <span>Skillzycord Converter — unofficial. Adobe &amp; After Effects are trademarks of Adobe Inc.</span>
+            <span>Temp files auto-deleted after 1 hour.</span>
+          </div>
         </div>
       </footer>
     </div>
@@ -275,7 +303,7 @@ function ResultCard({ result }) {
   return (
     <section className="mt-14 max-w-2xl mx-auto fade-up" data-testid="results-panel">
       <div className="glass-strong glow-ring p-8 text-center">
-        <div className="mx-auto h-16 w-16 rounded-full bg-white/5 flex items-center justify-center glow-ring pulse-soft">
+        <div className="mx-auto h-16 w-16 rounded-full bg-white/5 flex items-center justify-center glow-ring">
           <CheckCircle2 className="h-8 w-8 text-white text-glow" />
         </div>
         <h2 className="font-display font-extrabold text-2xl sm:text-3xl tracking-tight mt-5 text-glow">

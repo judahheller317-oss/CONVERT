@@ -60,7 +60,6 @@ body {
     background: radial-gradient(circle, rgba(140, 180, 255, 0.5), transparent 70%);
     top: -120px;
     right: -80px;
-    animation: float1 14s ease-in-out infinite;
 }
 .orb-2 {
     width: 420px;
