@@ -1,0 +1,90 @@
+{
+  "theme": "dark",
+  "archetype": "4 (Swiss & High-Contrast)",
+  "design_philosophy": "A command-center utility that feels like an advanced technical terminal, not a standard SaaS site. Prioritizes raw function and clear hierarchy, utilizing monospaced elements for technical data and bold sans-serif for headers.",
+  "colors": {
+    "background": "#050505",
+    "surface": "#111111",
+    "border": "#222222",
+    "primary": "#EAB308",
+    "primary_hover": "#FACC15",
+    "text_main": "#F8FAFC",
+    "text_muted": "#94A3B8",
+    "success": "#22C55E",
+    "error": "#EF4444",
+    "warning": "#F59E0B"
+  },
+  "typography": {
+    "heading_font": "'Outfit', sans-serif",
+    "body_font": "'IBM Plex Mono', monospace",
+    "weights": {
+      "heading": "700, 900",
+      "body": "400, 500"
+    },
+    "scales": {
+      "h1": "text-4xl sm:text-5xl md:text-6xl tracking-tight leading-none uppercase font-black",
+      "h2": "text-2xl sm:text-3xl tracking-tight font-bold",
+      "h3": "text-lg sm:text-xl font-bold",
+      "body": "text-sm sm:text-base leading-relaxed",
+      "overline": "text-xs tracking-[0.2em] uppercase"
+    }
+  },
+  "spacing_and_layout": {
+    "grid_system": "Control Room Grid (Mode B)",
+    "container_padding": "p-8 md:p-12",
+    "component_spacing": "gap-8",
+    "borders": "border border-[#222222]",
+    "radius": "rounded-none",
+    "shadows": "shadow-[4px_4px_0px_0px_rgba(234,179,8,1)]"
+  },
+  "surface_strategies": {
+    "cards": "Grid Borders (Technical Look). Solid surface background `#111111` with `border border-[#222222]`. No rounded corners. Focus on stark lines.",
+    "buttons": "Flat solid background, sharp edges, brutalist solid shadow.",
+    "header": "Solid black with hard bottom border. `border-b border-[#222222]`."
+  },
+  "motion_and_interactions": {
+    "hover": "For primary buttons: translate-x-[2px] translate-y-[2px] shadow-none (simulating a physical press).",
+    "transitions": "transition-all duration-150 ease-out",
+    "marquee": "Use a kinetic marquee for the disclaimer, highly visible to prevent Adobe affiliation issues."
+  },
+  "components": {
+    "upload_zone": {
+      "style": "Massive target area. Dashed border `border-2 border-dashed border-[#333333] hover:border-yellow-500`. Background: `bg-[#0A0A0A]`. Must include an icon and clear CTA."
+    },
+    "dropdown": {
+      "style": "Use customized Shadcn UI Select. Apply `rounded-none`, `bg-[#111]`, `border-[#333]`, and use monospace font for the options."
+    },
+    "results_panel": {
+      "style": "Terminal-like window. `bg-black`, `border border-[#333]`, `font-mono`, `text-sm`, with syntax highlighting colors for warnings (yellow) and removals (red)."
+    },
+    "marquee_disclaimer": {
+      "style": "Text: 'NOT AFFILIATED WITH ADOBE INC. • UNOFFICIAL COMPATIBILITY OPTIMIZER • USE AT OWN RISK'. Yellow background `bg-yellow-500`, black text `text-black`, uppercase, monospace."
+    }
+  },
+  "assets": {
+    "icons": {
+      "library": "@phosphor-icons/react",
+      "style": "weight='regular'"
+    },
+    "images": [
+      {
+        "url": "https://images.pexels.com/photos/7641148/pexels-photo-7641148.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "description": "Dark abstract texture for background overlay",
+        "usage": "Apply as a fixed background overlay covering the viewport, using `opacity-5` and `mix-blend-lighten` or `mix-blend-overlay` to add subtle texture to the black background, preventing flat digital look."
+      }
+    ]
+  },
+  "accessibility": {
+    "contrast": "Ensure all text against black meets minimum 4.5:1. Use text-slate-100 for primary text, text-slate-400 for secondary.",
+    "focus_rings": "focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-black",
+    "test_ids": "Apply `data-testid` to upload-zone, target-version-dropdown, convert-button, download-button, results-panel."
+  },
+  "instructions_to_main_agent": [
+    "Install `@phosphor-icons/react`.",
+    "Install `react-fast-marquee` and use it for the global disclaimer banner at the very top or bottom of the layout.",
+    "Ensure Shadcn UI components (Select, Button, Card, Toast) are customized with `rounded-none` to fit the brutalist archetype.",
+    "The layout should be asymmetric: Use a CSS grid where the upload area is the dominant hero (e.g., col-span-8), and the configuration/results panel sits beside or below it.",
+    "Import 'Outfit' and 'IBM Plex Mono' from Google Fonts in the HTML or global CSS.",
+    "Remember to clearly state in the UI that this is NOT an official Adobe product."
+  ]
+}
