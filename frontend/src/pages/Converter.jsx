@@ -33,7 +33,7 @@ const VERSIONS = [
   { value: "2020", label: "After Effects 2020", internal: "v17.x" },
 ];
 
-const ACCEPT = ".aepx,.aep";
+const ACCEPT = ".aepx,.aep,.ffx";
 
 export default function Converter() {
   const [file, setFile] = useState(null);
@@ -46,8 +46,8 @@ export default function Converter() {
   const pickFile = (f) => {
     if (!f) return;
     const lower = f.name.toLowerCase();
-    if (!lower.endsWith(".aepx") && !lower.endsWith(".aep")) {
-      toast.error("Unsupported file. Upload a .aepx or .aep project file.");
+    if (!lower.endsWith(".aepx") && !lower.endsWith(".aep") && !lower.endsWith(".ffx")) {
+      toast.error("Unsupported file. Upload a .aepx, .aep or .ffx file.");
       return;
     }
     setFile(f);
@@ -298,7 +298,7 @@ export default function Converter() {
 
 function ResultCard({ result }) {
   const dl = () => window.open(`${API}/download/${result.job_id}`, "_blank");
-  const isAep = result.file_type === "aep";
+  const ext = `.${(result.output_filename.split(".").pop() || "aepx").toLowerCase()}`;
 
   return (
     <section className="mt-14 max-w-2xl mx-auto fade-up" data-testid="results-panel">
@@ -316,7 +316,7 @@ function ResultCard({ result }) {
         <div className="grid grid-cols-3 gap-3 mt-7">
           <Stat label="Detected" value={result.detected_version || "—"} />
           <Stat label="Target" value={result.target_version} />
-          <Stat label="Type" value={isAep ? ".aep" : ".aepx"} />
+          <Stat label="Type" value={ext} />
         </div>
 
         <p className="font-mono-ae text-xs text-slate-500 mt-6 break-all" data-testid="output-filename">
@@ -328,7 +328,7 @@ function ResultCard({ result }) {
           data-testid="download-button"
           className="btn-glow font-display font-bold uppercase tracking-wide text-sm py-4 px-8 inline-flex items-center justify-center gap-2 mt-6"
         >
-          <Download className="h-4 w-4" /> Download {isAep ? ".aep" : ".aepx"}
+          <Download className="h-4 w-4" /> Download {ext}
         </button>
       </div>
     </section>

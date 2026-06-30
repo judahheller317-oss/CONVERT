@@ -176,44 +176,76 @@ def convert_aepx(raw_bytes, target_year):
     return out_text.encode("utf-8"), report
 
 
-def convert_aep_binary(raw_bytes, target_year):
-    """Detection-only best-effort for binary .aep files.
+def convert_binary(raw_bytes, target_year, ext="aep"):
+    """Offset-safe best-effort downgrade for binary AE files (.aep / .ffx).
 
-    Binary .aep cannot be safely rewritten without After Effects, so we scan
-    for ASCII match-names, report findings, and return the file unchanged.
+    Binary AE files (RIFX) embed keyframes, effects and a version stamp. We
+    NEVER change the byte length of the file, so all keyframe/effect data stays
+    byte-aligned and intact. We only:
+      - rewrite the ASCII version stamp (e.g. "After Effects 2026" -> 2020),
+      - swap modern effect match-names for an OLDER equivalent of the SAME byte
+        length (safe in-place), and
+      - detect (report-only) any unsupported effects that cannot be safely
+        removed from a binary file.
     """
-    try:
-        ascii_text = raw_bytes.decode("latin-1", errors="ignore")
-    except Exception:
-        ascii_text = ""
-
+    data = bytearray(raw_bytes)
+    ascii_text = raw_bytes.decode("latin-1", errors="ignore")
     detected = detect_version(ascii_text)
     remove_features, replace_features = build_plan(target_year)
 
+    replaced_report = []
     detected_effects = []
-    warnings = [
-        "Binary .aep detected: DETECTION-ONLY mode. The file is returned unchanged.",
-        "For full conversion, open the project in After Effects and re-save as .aepx (File > Save As > Save a Copy as XML), then re-upload.",
-    ]
+    warnings = []
+
+    # 1) Offset-safe version stamp rewrite (same digit count -> no shift).
+    target_bytes = str(target_year).encode("latin-1")
+    version_rewrites = 0
+    for m in re.finditer(rb"After\s*Effects\s*(\d{4})", data):
+        start, end = m.span(1)
+        if data[start:end] != target_bytes:
+            data[start:end] = target_bytes
+            version_rewrites += 1
+
+    # 2) Equal-length match-name swaps (safe in-place replacement).
+    for r in replace_features:
+        src = r["matchname"].encode("latin-1")
+        dst = r["replacement"].encode("latin-1")
+        if len(src) != len(dst):
+            continue  # length change would corrupt RIFX offsets — skip
+        cnt = data.count(src)
+        if cnt:
+            data = bytearray(data.replace(src, dst))
+            replaced_report.append({
+                "from_matchname": r["matchname"], "from_name": r["name"],
+                "to_matchname": r["replacement"], "to_name": r["replacement_name"],
+                "count": cnt,
+            })
+
+    # 3) Detect-only: unsupported effects that cannot be safely stripped.
     for f in remove_features:
         c = _scan_counts(ascii_text, f["matchname"])
         if c:
             detected_effects.append({"matchname": f["matchname"], "name": f["name"], "count": c})
-            warnings.append(f"Detected {c}x unsupported feature (not removed): {f['name']}")
+            warnings.append(f"Detected {c}x effect newer than AE {target_year}: {f['name']} (kept — binary presets can't be safely stripped)")
 
+    if version_rewrites:
+        warnings.insert(0, f"Version stamp rewritten to After Effects {target_year} ({version_rewrites}x). All keyframes preserved.")
+
+    total_changes = len(replaced_report) + version_rewrites
     report = {
         "detected_version": detected,
         "target_version": target_year,
         "target_internal_version": INTERNAL_VERSION.get(target_year),
         "removed_effects": [],
-        "replaced_effects": [],
+        "replaced_effects": replaced_report,
         "detected_unsupported": detected_effects,
         "warnings": warnings,
-        "total_changes": 0,
-        "file_type": "aep",
+        "total_changes": total_changes,
+        "file_type": ext,
         "valid_xml": False,
     }
-    return raw_bytes, report
+    return bytes(data), report
+
 
 
 SAMPLE_AEPX = """<?xml version="1.0" encoding="UTF-8"?>

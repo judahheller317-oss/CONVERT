@@ -24,7 +24,7 @@ api_router = APIRouter(prefix="/api")
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-ALLOWED_EXT = {".aepx", ".aep"}
+ALLOWED_EXT = {".aepx", ".aep", ".ffx"}
 
 
 def _prune_old_jobs():
@@ -73,7 +73,7 @@ async def convert(file: UploadFile = File(...), target_version: int = Form(...))
     original_name = file.filename or "project.aepx"
     ext = Path(original_name).suffix.lower()
     if ext not in ALLOWED_EXT:
-        raise HTTPException(status_code=400, detail="Only .aepx and .aep files are accepted.")
+        raise HTTPException(status_code=400, detail="Only .aepx, .aep and .ffx files are accepted.")
 
     raw = await file.read()
     if not raw:
@@ -87,8 +87,9 @@ async def convert(file: UploadFile = File(...), target_version: int = Form(...))
         out_bytes, report = ae.convert_aepx(raw, target_version)
         out_name = f"{stem}_SKLZYCRD{target_version}.aepx"
     else:
-        out_bytes, report = ae.convert_aep_binary(raw, target_version)
-        out_name = f"{stem}_SKLZYCRD{target_version}.aep"
+        kind = ext.lstrip(".")  # "aep" or "ffx"
+        out_bytes, report = ae.convert_binary(raw, target_version, kind)
+        out_name = f"{stem}_SKLZYCRD{target_version}{ext}"
 
     job_id = str(uuid.uuid4())
     job_dir = JOBS_DIR / job_id
