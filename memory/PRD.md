@@ -26,11 +26,11 @@ Build a full-stack web app "AE Compatibility Converter" that lets users upload A
 
 ## Implemented (2026-06-30)
 - Full conversion engine: remove effects newer than target, replace modern→legacy effects, rewrite version metadata, valid XML output.
-- Upload (.aepx/.aep), target version select (2020–2023), convert, download single file + zip bundle with report.
-- Binary .aep detection-only mode with clear warnings.
-- Sample .aepx generator endpoint + UI link.
-- Brutalist dark UI with disclaimer marquee, terminal results panel.
-- Tested: 10/10 backend pytest, full frontend E2E — all passing.
+- Upload (.aepx/.aep/.ffx), target version select (2020–2026), convert, download single file.
+- Binary .aep & .ffx: offset-safe best-effort — version stamp rewrite + equal-length effect-ID swaps, ALL keyframes/bytes preserved (file length unchanged), unsupported effects detected/reported (cannot be safely stripped from binary).
+- Futuristic black/white glow UI (glassmorphism, static glow, no glitchy animations), "Created by Skillzy" credits footer with TikTok/YouTube/Discord links.
+- Branding: SKILLZYCORD, badge "AE Project File Converter".
+- Tested: backend pytest + frontend E2E; all three formats verified, invalid types rejected (400).
 
 ## Backlog
 - P1: Compatibility score (0–100%) gauge.

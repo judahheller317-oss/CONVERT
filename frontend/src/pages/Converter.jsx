@@ -173,13 +173,13 @@ export default function Converter() {
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-5">
-                  <div className="h-20 w-20 rounded-full bg-white/5 flex items-center justify-center pulse-soft glow-ring">
+                  <div className="h-20 w-20 rounded-full bg-white/5 flex items-center justify-center glow-ring">
                     <UploadCloud className="h-9 w-9 text-white" strokeWidth={1.5} />
                   </div>
                   <div>
-                    <p className="font-display font-bold text-2xl tracking-tight">Upload project file</p>
+                    <p className="font-display font-bold text-2xl tracking-tight">Add file</p>
                     <p className="font-mono-ae text-sm text-slate-500 mt-2">
-                      drag &amp; drop or click to browse · .aepx / .aep
+                      drag &amp; drop or click to browse · project files &amp; presets (.aepx / .aep / .ffx)
                     </p>
                   </div>
                 </div>
