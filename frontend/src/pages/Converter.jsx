@@ -35,6 +35,40 @@ const VERSIONS = [
 
 const ACCEPT = ".aepx,.aep,.ffx";
 
+function playDoneSound() {
+  try {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    const ctx = new Ctx();
+    const now = ctx.currentTime;
+    const master = ctx.createGain();
+    master.gain.setValueAtTime(0.0001, now);
+    master.connect(ctx.destination);
+    // pleasant two-note "ta-da" chime
+    const notes = [
+      { f: 660, t: 0 },
+      { f: 988, t: 0.12 },
+    ];
+    notes.forEach(({ f, t }) => {
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(f, now + t);
+      g.gain.setValueAtTime(0.0001, now + t);
+      g.gain.exponentialRampToValueAtTime(0.25, now + t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + t + 0.45);
+      osc.connect(g);
+      g.connect(master);
+      osc.start(now + t);
+      osc.stop(now + t + 0.5);
+    });
+    master.gain.setValueAtTime(0.9, now);
+    setTimeout(() => ctx.close(), 900);
+  } catch (e) {
+    /* sound is non-critical */
+  }
+}
+
 export default function Converter() {
   const [file, setFile] = useState(null);
   const [target, setTarget] = useState("2022");
@@ -73,6 +107,7 @@ export default function Converter() {
       form.append("target_version", target);
       const { data } = await axios.post(`${API}/convert`, form);
       setResult(data);
+      playDoneSound();
       toast.success(`Optimized for After Effects ${target}.`);
     } catch (err) {
       const msg = err?.response?.data?.detail || "Conversion failed. Please try again.";
@@ -131,8 +166,8 @@ export default function Converter() {
             Downgrade your <span className="text-glow">After Effects</span> projects.
           </h1>
           <p className="font-mono-ae text-sm sm:text-base text-slate-400 mt-6 leading-relaxed max-w-2xl mx-auto">
-            Upload a project, pick an older target version, and we strip or swap unsupported effects so the file
-            opens on legacy installs. Best-effort, never official.
+            Works for projects <span className="text-white">and presets</span> (.aepx / .aep / .ffx). Upload a file, pick an
+            older target version, and we strip or swap unsupported effects so it opens on legacy installs. Best-effort, never official.
           </p>
         </div>
 
