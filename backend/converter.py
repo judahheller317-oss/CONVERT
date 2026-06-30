@@ -14,10 +14,13 @@ INTERNAL_VERSION = {
     2022: "22.0",
     2023: "23.0",
     2024: "24.0",
+    2025: "25.0",
+    2026: "26.0",
 }
 
 APP_VERSION_TO_YEAR = {
-    "16": 2019, "17": 2020, "18": 2021, "22": 2022, "23": 2023, "24": 2024, "25": 2025,
+    "16": 2019, "17": 2020, "18": 2021, "22": 2022, "23": 2023,
+    "24": 2024, "25": 2025, "26": 2026,
 }
 
 # Modern features keyed by the release year they were introduced.
@@ -50,7 +53,7 @@ REPLACEMENTS = [
     },
 ]
 
-TARGET_VERSIONS = [2020, 2021, 2022, 2023]
+TARGET_VERSIONS = [2020, 2021, 2022, 2023, 2024, 2025, 2026]
 
 
 def build_plan(target_year):

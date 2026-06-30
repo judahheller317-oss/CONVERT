@@ -3,10 +3,8 @@ from fastapi.responses import Response
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 import os
-import io
 import time
 import json
-import zipfile
 import logging
 import uuid
 from pathlib import Path
@@ -87,10 +85,10 @@ async def convert(file: UploadFile = File(...), target_version: int = Form(...))
 
     if ext == ".aepx":
         out_bytes, report = ae.convert_aepx(raw, target_version)
-        out_name = f"{stem}_AE{target_version}.aepx"
+        out_name = f"{stem}_SKLZYCRD{target_version}.aepx"
     else:
         out_bytes, report = ae.convert_aep_binary(raw, target_version)
-        out_name = f"{stem}_AE{target_version}.aep"
+        out_name = f"{stem}_SKLZYCRD{target_version}.aep"
 
     job_id = str(uuid.uuid4())
     job_dir = JOBS_DIR / job_id
@@ -128,56 +126,6 @@ async def download(job_id: str):
     )
 
 
-@api_router.get("/download/{job_id}/zip")
-async def download_zip(job_id: str):
-    job_dir, report, out_name = _load_job(job_id)
-    data = (job_dir / out_name).read_bytes()
-
-    buf = io.BytesIO()
-    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
-        zf.writestr(out_name, data)
-        readme = _build_readme(report)
-        zf.writestr("CONVERSION_REPORT.txt", readme)
-    buf.seek(0)
-    zip_name = f"{Path(out_name).stem}_bundle.zip"
-    return Response(
-        content=buf.read(),
-        media_type="application/zip",
-        headers={"Content-Disposition": f'attachment; filename="{zip_name}"'},
-    )
-
-
-def _build_readme(report):
-    lines = [
-        "AE COMPATIBILITY CONVERTER - CONVERSION REPORT",
-        "==============================================",
-        "UNOFFICIAL, BEST-EFFORT TOOL. NOT AFFILIATED WITH ADOBE INC.",
-        "",
-        f"Original file : {report.get('original_filename')}",
-        f"Output file   : {report.get('output_filename')}",
-        f"Detected ver. : {report.get('detected_version') or 'Unknown'}",
-        f"Target version: After Effects {report.get('target_version')} (internal {report.get('target_internal_version')})",
-        f"Total changes : {report.get('total_changes')}",
-        "",
-        "REMOVED EFFECTS:",
-    ]
-    for r in report.get("removed_effects", []) or ["  (none)"]:
-        lines.append(f"  - {r['name']} ({r['matchname']}) x{r['count']}" if isinstance(r, dict) else r)
-    lines.append("")
-    lines.append("REPLACED EFFECTS:")
-    rep = report.get("replaced_effects", [])
-    if rep:
-        for r in rep:
-            lines.append(f"  - {r['from_name']} -> {r['to_name']} x{r['count']}")
-    else:
-        lines.append("  (none)")
-    lines.append("")
-    lines.append("WARNINGS:")
-    for w in report.get("warnings", []) or ["  (none)"]:
-        lines.append(f"  ! {w}")
-    return "\n".join(lines)
-
-
 app.include_router(api_router)
 
 app.add_middleware(
@@ -187,3 +135,4 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+

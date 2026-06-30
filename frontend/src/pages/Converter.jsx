@@ -7,7 +7,6 @@ import {
   FileCode2,
   Cpu,
   Download,
-  FileArchive,
   Trash2,
   Loader2,
   AlertTriangle,
@@ -28,6 +27,9 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const VERSIONS = [
+  { value: "2026", label: "After Effects 2026", internal: "v26.x" },
+  { value: "2025", label: "After Effects 2025", internal: "v25.x" },
+  { value: "2024", label: "After Effects 2024", internal: "v24.x" },
   { value: "2023", label: "After Effects 2023", internal: "v23.x" },
   { value: "2022", label: "After Effects 2022", internal: "v22.x" },
   { value: "2021", label: "After Effects 2021", internal: "v18.x" },
@@ -118,8 +120,8 @@ export default function Converter() {
               <Cpu className="h-5 w-5 text-black" strokeWidth={2.5} />
             </div>
             <div>
-              <p className="font-display font-black text-lg leading-none tracking-tight uppercase">AE Compat</p>
-              <p className="font-mono-ae text-[10px] tracking-[0.25em] text-slate-500 uppercase">Converter v1.0</p>
+              <p className="font-display font-black text-lg leading-none tracking-tight uppercase">Skillzycord</p>
+              <p className="font-mono-ae text-[10px] tracking-[0.25em] text-slate-500 uppercase">Converter</p>
             </div>
           </div>
           <button
@@ -186,7 +188,7 @@ export default function Converter() {
                 <div className="flex flex-col items-center gap-4">
                   <UploadCloud className={`h-14 w-14 ${dragging ? "text-yellow-500" : "text-slate-600"}`} strokeWidth={1.5} />
                   <div>
-                    <p className="font-display font-bold text-xl uppercase tracking-tight">Drop project file here</p>
+                    <p className="font-display font-bold text-xl uppercase tracking-tight">Upload project file</p>
                     <p className="font-mono-ae text-sm text-slate-500 mt-2">
                       or click to browse · <span className="text-slate-300">.aepx</span> recommended · .aep supported
                     </p>
@@ -353,21 +355,14 @@ function ResultsPanel({ result }) {
             <span>Done. Output ready for download.</span>
           </div>
 
-          {/* Download buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          {/* Download button */}
+          <div className="flex pt-2">
             <button
               onClick={() => dl("")}
               data-testid="download-button"
               className="btn-press bg-yellow-500 text-black font-display font-bold uppercase tracking-wide text-sm py-3.5 px-6 flex items-center justify-center gap-2 flex-1"
             >
               <Download className="h-4 w-4" /> Download {isAep ? ".aep" : ".aepx"}
-            </button>
-            <button
-              onClick={() => dl("/zip")}
-              data-testid="download-zip-button"
-              className="border border-[#333] bg-[#111] text-slate-200 hover:border-yellow-500 transition-colors font-display font-bold uppercase tracking-wide text-sm py-3.5 px-6 flex items-center justify-center gap-2 flex-1"
-            >
-              <FileArchive className="h-4 w-4" /> Download .zip + report
             </button>
           </div>
         </div>
