@@ -3,16 +3,13 @@
 @tailwind utilities;
 
 :root {
-    --ae-bg: #050505;
-    --ae-surface: #111111;
-    --ae-border: #222222;
-    --ae-primary: #eab308;
+    --glow: 210 100% 92%;
 }
 
 body {
     margin: 0;
-    background: var(--ae-bg);
-    color: #f8fafc;
+    background: #000000;
+    color: #f5f7fa;
     font-family: "IBM Plex Mono", monospace;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -26,66 +23,168 @@ body {
 }
 
 ::selection {
-    background: #eab308;
-    color: #050505;
+    background: #ffffff;
+    color: #000000;
 }
 
-/* Brutalist solid shadow + press interaction */
-.btn-press {
-    box-shadow: 4px 4px 0px 0px rgba(234, 179, 8, 1);
-    transition:
-        transform 0.15s ease-out,
-        box-shadow 0.15s ease-out,
-        background-color 0.15s ease-out;
+/* ---- Ambient futuristic background ---- */
+.space-bg {
+    position: relative;
+    background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(120, 170, 255, 0.12), transparent 60%),
+        radial-gradient(900px 500px at 10% 110%, rgba(180, 210, 255, 0.08), transparent 60%),
+        #000000;
 }
-.btn-press:hover:not(:disabled) {
-    transform: translate(2px, 2px);
-    box-shadow: 0px 0px 0px 0px rgba(234, 179, 8, 1);
-}
-
-.grid-bg {
+.grid-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
     background-image:
-        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-    background-size: 44px 44px;
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 52px 52px;
+    mask-image: radial-gradient(circle at 50% 30%, #000 30%, transparent 80%);
+    z-index: 0;
+}
+.orb {
+    position: fixed;
+    border-radius: 9999px;
+    filter: blur(80px);
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+}
+.orb-1 {
+    width: 480px;
+    height: 480px;
+    background: radial-gradient(circle, rgba(140, 180, 255, 0.5), transparent 70%);
+    top: -120px;
+    right: -80px;
+    animation: float1 14s ease-in-out infinite;
+}
+.orb-2 {
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.18), transparent 70%);
+    bottom: -140px;
+    left: -100px;
+    animation: float2 18s ease-in-out infinite;
+}
+@keyframes float1 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-40px, 50px); }
+}
+@keyframes float2 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(50px, -40px); }
+}
+
+/* ---- Glass surfaces ---- */
+.glass {
+    background: rgba(255, 255, 255, 0.025);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+}
+.glass-strong {
+    background: rgba(255, 255, 255, 0.045);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 18px;
+}
+
+/* ---- Glow ---- */
+.text-glow {
+    text-shadow: 0 0 24px rgba(180, 210, 255, 0.55), 0 0 4px rgba(255, 255, 255, 0.6);
+}
+.glow-ring {
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.12),
+        0 0 40px rgba(140, 180, 255, 0.18);
+}
+
+/* ---- White glowing button ---- */
+.btn-glow {
+    background: #ffffff;
+    color: #000;
+    border-radius: 9999px;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4), 0 0 28px rgba(180, 210, 255, 0.45);
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        opacity 0.25s ease;
+}
+.btn-glow:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.7), 0 0 46px rgba(180, 210, 255, 0.8);
+}
+.btn-ghost {
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    transition: all 0.25s ease;
+}
+.btn-ghost:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 24px rgba(180, 210, 255, 0.25);
+}
+
+/* ---- Upload scan animation ---- */
+.scan-line::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(180, 210, 255, 0.9), transparent);
+    animation: scan 2.8s linear infinite;
+    box-shadow: 0 0 18px rgba(180, 210, 255, 0.8);
+}
+@keyframes scan {
+    0% { top: 8%; opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { top: 92%; opacity: 0; }
 }
 
 @keyframes ae-fade-up {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
 }
-.fade-up {
-    animation: ae-fade-up 0.45s ease-out both;
+.fade-up { animation: ae-fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.delay-1 { animation-delay: 0.08s; }
+.delay-2 { animation-delay: 0.16s; }
+.delay-3 { animation-delay: 0.24s; }
+
+@keyframes pulse-soft {
+    0%, 100% { opacity: 0.55; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.06); }
 }
+.pulse-soft { animation: pulse-soft 3s ease-in-out infinite; }
 
 @layer base {
     :root {
-        --background: 0 0% 2%;
-        --foreground: 0 0% 98%;
-        --card: 0 0% 7%;
-        --card-foreground: 0 0% 98%;
-        --popover: 0 0% 7%;
-        --popover-foreground: 0 0% 98%;
-        --primary: 45 93% 47%;
-        --primary-foreground: 0 0% 4%;
-        --secondary: 0 0% 13%;
-        --secondary-foreground: 0 0% 98%;
-        --muted: 0 0% 13%;
-        --muted-foreground: 215 16% 65%;
-        --accent: 0 0% 13%;
-        --accent-foreground: 0 0% 98%;
+        --background: 0 0% 0%;
+        --foreground: 210 20% 96%;
+        --card: 0 0% 4%;
+        --card-foreground: 210 20% 96%;
+        --popover: 0 0% 6%;
+        --popover-foreground: 210 20% 96%;
+        --primary: 0 0% 100%;
+        --primary-foreground: 0 0% 0%;
+        --secondary: 0 0% 12%;
+        --secondary-foreground: 210 20% 96%;
+        --muted: 0 0% 12%;
+        --muted-foreground: 215 16% 60%;
+        --accent: 0 0% 12%;
+        --accent-foreground: 210 20% 96%;
         --destructive: 0 84% 60%;
         --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 13%;
-        --input: 0 0% 13%;
-        --ring: 45 93% 47%;
-        --radius: 0rem;
+        --border: 0 0% 16%;
+        --input: 0 0% 16%;
+        --ring: 210 100% 80%;
+        --radius: 0.75rem;
     }
 }
 

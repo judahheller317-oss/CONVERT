@@ -4,16 +4,13 @@ import Marquee from "react-fast-marquee";
 import { toast } from "sonner";
 import {
   UploadCloud,
-  FileCode2,
+  FileCheck2,
   Cpu,
   Download,
   Trash2,
   Loader2,
-  AlertTriangle,
   CheckCircle2,
-  ArrowRight,
-  Boxes,
-  Replace,
+  Sparkles,
 } from "lucide-react";
 import {
   Select,
@@ -55,9 +52,6 @@ export default function Converter() {
     }
     setFile(f);
     setResult(null);
-    if (lower.endsWith(".aep")) {
-      toast.warning("Binary .aep detected — limited (detection-only) support. .aepx is recommended.");
-    }
   };
 
   const onDrop = useCallback((e) => {
@@ -79,7 +73,7 @@ export default function Converter() {
       form.append("target_version", target);
       const { data } = await axios.post(`${API}/convert`, form);
       setResult(data);
-      toast.success(`Optimized for AE ${target} — ${data.total_changes} change(s) applied.`);
+      toast.success(`Optimized for After Effects ${target}.`);
     } catch (err) {
       const msg = err?.response?.data?.detail || "Conversion failed. Please try again.";
       toast.error(msg);
@@ -94,65 +88,65 @@ export default function Converter() {
     if (inputRef.current) inputRef.current.value = "";
   };
 
-  const downloadSample = () => {
-    window.open(`${API}/sample`, "_blank");
-  };
-
   return (
-    <div className="min-h-screen grid-bg text-slate-100">
+    <div className="space-bg min-h-screen text-slate-100 relative overflow-hidden">
+      <div className="grid-overlay" />
+      <div className="orb orb-1" />
+      <div className="orb orb-2" />
+
       {/* Disclaimer marquee */}
-      <div className="bg-yellow-500 text-black border-b-2 border-black" data-testid="disclaimer-marquee">
-        <Marquee speed={48} gradient={false} className="py-1.5">
-          <span className="font-mono-ae text-xs font-semibold uppercase tracking-[0.15em] mx-8">
-            Not affiliated with Adobe Inc. • Unofficial best-effort compatibility optimizer • Always keep a backup of your original project • Use at your own risk
+      <div className="relative z-10 border-b border-white/10 bg-white/[0.02] backdrop-blur" data-testid="disclaimer-marquee">
+        <Marquee speed={42} gradient={false} className="py-2">
+          <span className="font-mono-ae text-[11px] tracking-[0.25em] uppercase text-slate-400 mx-10">
+            Not affiliated with Adobe Inc. — Unofficial best-effort compatibility optimizer — Always keep a backup of your original project
           </span>
-          <span className="font-mono-ae text-xs font-semibold uppercase tracking-[0.15em] mx-8">
-            Not affiliated with Adobe Inc. • Unofficial best-effort compatibility optimizer • Always keep a backup of your original project • Use at your own risk
+          <span className="font-mono-ae text-[11px] tracking-[0.25em] uppercase text-slate-400 mx-10">
+            Not affiliated with Adobe Inc. — Unofficial best-effort compatibility optimizer — Always keep a backup of your original project
           </span>
         </Marquee>
       </div>
 
       {/* Header */}
-      <header className="border-b border-[#222] bg-black/60 backdrop-blur">
-        <div className="max-w-6xl mx-auto px-6 md:px-10 py-5 flex items-center justify-between">
+      <header className="relative z-10">
+        <div className="max-w-6xl mx-auto px-6 md:px-10 py-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 bg-yellow-500 flex items-center justify-center">
+            <div className="h-10 w-10 rounded-xl bg-white flex items-center justify-center glow-ring">
               <Cpu className="h-5 w-5 text-black" strokeWidth={2.5} />
             </div>
             <div>
-              <p className="font-display font-black text-lg leading-none tracking-tight uppercase">Skillzycord</p>
-              <p className="font-mono-ae text-[10px] tracking-[0.25em] text-slate-500 uppercase">Converter</p>
+              <p className="font-display font-extrabold text-lg leading-none tracking-tight uppercase text-glow">Skillzycord</p>
+              <p className="font-mono-ae text-[10px] tracking-[0.3em] text-slate-500 uppercase">Converter</p>
             </div>
           </div>
           <button
-            onClick={downloadSample}
+            onClick={() => window.open(`${API}/sample`, "_blank")}
             data-testid="download-sample-button"
-            className="font-mono-ae text-xs uppercase tracking-wider text-slate-400 hover:text-yellow-400 transition-colors"
+            className="font-mono-ae text-xs uppercase tracking-wider text-slate-400 hover:text-white transition-colors"
           >
             Get sample .aepx →
           </button>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-6 md:px-10 py-10 md:py-16">
+      <main className="relative z-10 max-w-6xl mx-auto px-6 md:px-10 py-10 md:py-16">
         {/* Hero */}
-        <div className="max-w-3xl fade-up">
-          <p className="font-mono-ae text-xs tracking-[0.25em] uppercase text-yellow-500 mb-4">
-            // XML project downgrader
-          </p>
-          <h1 className="font-display font-black uppercase tracking-tight leading-none text-4xl sm:text-5xl md:text-6xl">
-            Downgrade your <span className="text-yellow-500">After Effects</span> projects.
+        <div className="max-w-3xl mx-auto text-center fade-up">
+          <span className="inline-flex items-center gap-2 font-mono-ae text-[11px] tracking-[0.3em] uppercase text-slate-300 border border-white/15 rounded-full px-4 py-1.5 glow-ring">
+            <Sparkles className="h-3.5 w-3.5" /> XML project downgrader
+          </span>
+          <h1 className="font-display font-extrabold tracking-tight leading-[0.95] text-4xl sm:text-5xl md:text-6xl mt-7">
+            Downgrade your <span className="text-glow">After Effects</span> projects.
           </h1>
-          <p className="font-mono-ae text-sm sm:text-base text-slate-400 mt-6 leading-relaxed">
-            Upload an <span className="text-slate-200">.aepx</span> project, pick an older target version, and we strip or
-            swap unsupported effects so the file opens on legacy installs. Best-effort, never official.
+          <p className="font-mono-ae text-sm sm:text-base text-slate-400 mt-6 leading-relaxed max-w-2xl mx-auto">
+            Upload a project, pick an older target version, and we strip or swap unsupported effects so the file
+            opens on legacy installs. Best-effort, never official.
           </p>
         </div>
 
-        {/* Grid: upload (dominant) + config */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-12">
+        {/* Upload + config */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-14">
           {/* Upload zone */}
-          <section className="lg:col-span-8">
+          <section className="lg:col-span-7 fade-up delay-1">
             <div
               data-testid="upload-zone"
               onClick={() => inputRef.current?.click()}
@@ -162,9 +156,9 @@ export default function Converter() {
               }}
               onDragLeave={() => setDragging(false)}
               onDrop={onDrop}
-              className={`cursor-pointer border-2 border-dashed bg-[#0a0a0a] transition-all duration-150 px-8 py-14 md:py-20 flex flex-col items-center justify-center text-center ${
-                dragging ? "border-yellow-500 bg-yellow-500/5" : "border-[#333] hover:border-yellow-500/70"
-              }`}
+              className={`relative overflow-hidden cursor-pointer glass h-full min-h-[280px] px-8 py-16 flex flex-col items-center justify-center text-center transition-all duration-300 ${
+                dragging ? "border-white/60 glow-ring scale-[1.01]" : "hover:border-white/30"
+              } ${!file ? "scan-line" : ""}`}
             >
               <input
                 ref={inputRef}
@@ -176,8 +170,8 @@ export default function Converter() {
               />
               {file ? (
                 <div className="flex flex-col items-center gap-3">
-                  <FileCode2 className="h-12 w-12 text-yellow-500" strokeWidth={1.5} />
-                  <p className="font-mono-ae text-base text-slate-100 break-all max-w-md" data-testid="selected-filename">
+                  <FileCheck2 className="h-14 w-14 text-white text-glow" strokeWidth={1.4} />
+                  <p className="font-mono-ae text-base text-white break-all max-w-md" data-testid="selected-filename">
                     {file.name}
                   </p>
                   <p className="font-mono-ae text-xs text-slate-500">
@@ -185,12 +179,14 @@ export default function Converter() {
                   </p>
                 </div>
               ) : (
-                <div className="flex flex-col items-center gap-4">
-                  <UploadCloud className={`h-14 w-14 ${dragging ? "text-yellow-500" : "text-slate-600"}`} strokeWidth={1.5} />
+                <div className="flex flex-col items-center gap-5">
+                  <div className="h-20 w-20 rounded-full bg-white/5 flex items-center justify-center pulse-soft glow-ring">
+                    <UploadCloud className="h-9 w-9 text-white" strokeWidth={1.5} />
+                  </div>
                   <div>
-                    <p className="font-display font-bold text-xl uppercase tracking-tight">Upload project file</p>
+                    <p className="font-display font-bold text-2xl tracking-tight">Upload project file</p>
                     <p className="font-mono-ae text-sm text-slate-500 mt-2">
-                      or click to browse · <span className="text-slate-300">.aepx</span> recommended · .aep supported
+                      drag &amp; drop or click to browse · .aepx / .aep
                     </p>
                   </div>
                 </div>
@@ -199,19 +195,19 @@ export default function Converter() {
           </section>
 
           {/* Config panel */}
-          <aside className="lg:col-span-4">
-            <div className="border border-[#222] bg-[#111] h-full p-6 flex flex-col">
-              <p className="font-mono-ae text-xs tracking-[0.2em] uppercase text-slate-500 mb-4">Target version</p>
+          <aside className="lg:col-span-5 fade-up delay-2">
+            <div className="glass-strong h-full p-7 flex flex-col">
+              <p className="font-mono-ae text-[11px] tracking-[0.3em] uppercase text-slate-400 mb-4">Target version</p>
               <Select value={target} onValueChange={setTarget}>
                 <SelectTrigger
                   data-testid="target-version-dropdown"
-                  className="rounded-none bg-[#0a0a0a] border-[#333] font-mono-ae h-12 text-base focus:ring-yellow-500"
+                  className="rounded-xl bg-white/5 border-white/15 font-mono-ae h-12 text-base focus:ring-white/50"
                 >
                   <SelectValue placeholder="Select version" />
                 </SelectTrigger>
-                <SelectContent className="rounded-none bg-[#111] border-[#333] font-mono-ae">
+                <SelectContent className="rounded-xl bg-[#0a0a0a] border-white/15 font-mono-ae">
                   {VERSIONS.map((v) => (
-                    <SelectItem key={v.value} value={v.value} data-testid={`version-option-${v.value}`} className="rounded-none">
+                    <SelectItem key={v.value} value={v.value} data-testid={`version-option-${v.value}`} className="rounded-lg">
                       <span className="flex items-center justify-between w-full gap-4">
                         <span>{v.label}</span>
                         <span className="text-slate-500 text-xs">{v.internal}</span>
@@ -221,18 +217,18 @@ export default function Converter() {
                 </SelectContent>
               </Select>
 
-              <div className="mt-6 space-y-2 font-mono-ae text-xs text-slate-500 leading-relaxed">
-                <p>· removes effects newer than target</p>
-                <p>· swaps modern effects for legacy equals</p>
-                <p>· rewrites version metadata</p>
+              <div className="mt-6 space-y-2.5 font-mono-ae text-xs text-slate-500 leading-relaxed">
+                <p className="flex items-center gap-2"><span className="h-1 w-1 rounded-full bg-white/60" /> removes effects newer than target</p>
+                <p className="flex items-center gap-2"><span className="h-1 w-1 rounded-full bg-white/60" /> swaps modern effects for legacy equivalents</p>
+                <p className="flex items-center gap-2"><span className="h-1 w-1 rounded-full bg-white/60" /> rewrites version metadata</p>
               </div>
 
-              <div className="mt-auto pt-6 flex flex-col gap-3">
+              <div className="mt-auto pt-7 flex flex-col gap-3">
                 <button
                   onClick={convert}
                   disabled={!file || processing}
                   data-testid="convert-button"
-                  className="btn-press bg-yellow-500 text-black font-display font-bold uppercase tracking-wide text-sm py-4 px-6 flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="btn-glow font-display font-bold uppercase tracking-wide text-sm py-4 px-6 flex items-center justify-center gap-2 disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   {processing ? (
                     <>
@@ -248,7 +244,7 @@ export default function Converter() {
                   <button
                     onClick={reset}
                     data-testid="reset-button"
-                    className="font-mono-ae text-xs uppercase tracking-wider text-slate-500 hover:text-red-400 transition-colors flex items-center justify-center gap-1.5"
+                    className="font-mono-ae text-xs uppercase tracking-wider text-slate-500 hover:text-white transition-colors flex items-center justify-center gap-1.5"
                   >
                     <Trash2 className="h-3.5 w-3.5" /> Clear file
                   </button>
@@ -258,13 +254,13 @@ export default function Converter() {
           </aside>
         </div>
 
-        {/* Results terminal */}
-        {result && <ResultsPanel result={result} />}
+        {/* Result */}
+        {result && <ResultCard result={result} />}
       </main>
 
-      <footer className="border-t border-[#222] mt-16">
+      <footer className="relative z-10 border-t border-white/10 mt-20">
         <div className="max-w-6xl mx-auto px-6 md:px-10 py-8 font-mono-ae text-xs text-slate-600 flex flex-col sm:flex-row gap-2 justify-between">
-          <span>AE Compatibility Converter — unofficial tool. Adobe & After Effects are trademarks of Adobe Inc.</span>
+          <span>Skillzycord Converter — unofficial. Adobe &amp; After Effects are trademarks of Adobe Inc.</span>
           <span>Temp files auto-deleted after 1 hour.</span>
         </div>
       </footer>
@@ -272,123 +268,50 @@ export default function Converter() {
   );
 }
 
-function ResultsPanel({ result }) {
-  const dl = (suffix = "") => window.open(`${API}/download/${result.job_id}${suffix}`, "_blank");
+function ResultCard({ result }) {
+  const dl = () => window.open(`${API}/download/${result.job_id}`, "_blank");
   const isAep = result.file_type === "aep";
 
   return (
-    <section className="mt-12 fade-up" data-testid="results-panel">
-      <div className="border border-[#333] bg-black">
-        {/* Terminal title bar */}
-        <div className="flex items-center justify-between border-b border-[#333] px-4 py-2.5 bg-[#0a0a0a]">
-          <div className="flex items-center gap-2 font-mono-ae text-xs text-slate-400">
-            <span className="h-3 w-3 rounded-full bg-red-500/70" />
-            <span className="h-3 w-3 rounded-full bg-yellow-500/70" />
-            <span className="h-3 w-3 rounded-full bg-green-500/70" />
-            <span className="ml-3 uppercase tracking-wider">conversion_report.log</span>
-          </div>
-          <span className="font-mono-ae text-xs text-slate-600 truncate max-w-[40%]">{result.output_filename}</span>
+    <section className="mt-14 max-w-2xl mx-auto fade-up" data-testid="results-panel">
+      <div className="glass-strong glow-ring p-8 text-center">
+        <div className="mx-auto h-16 w-16 rounded-full bg-white/5 flex items-center justify-center glow-ring pulse-soft">
+          <CheckCircle2 className="h-8 w-8 text-white text-glow" />
+        </div>
+        <h2 className="font-display font-extrabold text-2xl sm:text-3xl tracking-tight mt-5 text-glow">
+          Conversion complete
+        </h2>
+        <p className="font-mono-ae text-sm text-slate-400 mt-2">
+          Optimized for <span className="text-white">After Effects {result.target_version}</span>. Ready to download.
+        </p>
+
+        <div className="grid grid-cols-3 gap-3 mt-7">
+          <Stat label="Detected" value={result.detected_version || "—"} />
+          <Stat label="Target" value={result.target_version} />
+          <Stat label="Type" value={isAep ? ".aep" : ".aepx"} />
         </div>
 
-        <div className="p-6 font-mono-ae text-sm space-y-6">
-          {/* Summary line */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-[#222] border border-[#222]">
-            <Stat label="Detected" value={result.detected_version || "Unknown"} />
-            <Stat label="Target" value={`AE ${result.target_version}`} accent />
-            <Stat label="Changes" value={result.total_changes} />
-            <Stat label="Type" value={isAep ? ".aep (binary)" : ".aepx (xml)"} />
-          </div>
+        <p className="font-mono-ae text-xs text-slate-500 mt-6 break-all" data-testid="output-filename">
+          {result.output_filename}
+        </p>
 
-          {/* Removed */}
-          <Block icon={<Boxes className="h-4 w-4 text-red-400" />} title="Removed effects" count={result.removed_effects?.length || 0}>
-            {result.removed_effects?.length ? (
-              result.removed_effects.map((r, i) => (
-                <p key={i} className="text-red-300/90" data-testid={`removed-effect-${i}`}>
-                  <span className="text-slate-600">-</span> {r.name}{" "}
-                  <span className="text-slate-600">({r.matchname}) ×{r.count}</span>
-                </p>
-              ))
-            ) : (
-              <p className="text-slate-600">No unsupported effects found to remove.</p>
-            )}
-          </Block>
-
-          {/* Replaced */}
-          <Block icon={<Replace className="h-4 w-4 text-yellow-400" />} title="Replaced effects" count={result.replaced_effects?.length || 0}>
-            {result.replaced_effects?.length ? (
-              result.replaced_effects.map((r, i) => (
-                <p key={i} className="text-yellow-200/90 flex items-center gap-2 flex-wrap" data-testid={`replaced-effect-${i}`}>
-                  {r.from_name} <ArrowRight className="h-3 w-3 inline text-slate-600" /> {r.to_name}
-                  <span className="text-slate-600">×{r.count}</span>
-                </p>
-              ))
-            ) : (
-              <p className="text-slate-600">No effects required replacement.</p>
-            )}
-          </Block>
-
-          {/* Detection-only (aep) */}
-          {isAep && result.detected_unsupported?.length > 0 && (
-            <Block icon={<AlertTriangle className="h-4 w-4 text-orange-400" />} title="Detected (not removed)" count={result.detected_unsupported.length}>
-              {result.detected_unsupported.map((r, i) => (
-                <p key={i} className="text-orange-300/90">
-                  <span className="text-slate-600">!</span> {r.name} <span className="text-slate-600">×{r.count}</span>
-                </p>
-              ))}
-            </Block>
-          )}
-
-          {/* Warnings */}
-          {result.warnings?.length > 0 && (
-            <Block icon={<AlertTriangle className="h-4 w-4 text-yellow-500" />} title="Warnings" count={result.warnings.length}>
-              {result.warnings.map((w, i) => (
-                <p key={i} className="text-slate-400" data-testid={`warning-${i}`}>
-                  <span className="text-yellow-600">!</span> {w}
-                </p>
-              ))}
-            </Block>
-          )}
-
-          {/* Success line */}
-          <div className="flex items-center gap-2 text-green-400 pt-2 border-t border-[#222]">
-            <CheckCircle2 className="h-4 w-4" />
-            <span>Done. Output ready for download.</span>
-          </div>
-
-          {/* Download button */}
-          <div className="flex pt-2">
-            <button
-              onClick={() => dl("")}
-              data-testid="download-button"
-              className="btn-press bg-yellow-500 text-black font-display font-bold uppercase tracking-wide text-sm py-3.5 px-6 flex items-center justify-center gap-2 flex-1"
-            >
-              <Download className="h-4 w-4" /> Download {isAep ? ".aep" : ".aepx"}
-            </button>
-          </div>
-        </div>
+        <button
+          onClick={dl}
+          data-testid="download-button"
+          className="btn-glow font-display font-bold uppercase tracking-wide text-sm py-4 px-8 inline-flex items-center justify-center gap-2 mt-6"
+        >
+          <Download className="h-4 w-4" /> Download {isAep ? ".aep" : ".aepx"}
+        </button>
       </div>
     </section>
   );
 }
 
-function Stat({ label, value, accent }) {
+function Stat({ label, value }) {
   return (
-    <div className="bg-[#0a0a0a] px-4 py-4">
-      <p className="text-[10px] uppercase tracking-[0.2em] text-slate-600">{label}</p>
-      <p className={`text-lg font-display font-bold mt-1 ${accent ? "text-yellow-500" : "text-slate-100"}`}>{value}</p>
-    </div>
-  );
-}
-
-function Block({ icon, title, count, children }) {
-  return (
-    <div>
-      <div className="flex items-center gap-2 mb-2">
-        {icon}
-        <span className="uppercase tracking-wider text-xs text-slate-400">{title}</span>
-        <span className="text-slate-600 text-xs">[{count}]</span>
-      </div>
-      <div className="pl-6 space-y-1 leading-relaxed">{children}</div>
+    <div className="glass rounded-xl py-4 px-3">
+      <p className="font-mono-ae text-[10px] uppercase tracking-[0.2em] text-slate-500">{label}</p>
+      <p className="font-display font-bold text-xl mt-1 text-white">{value}</p>
     </div>
   );
 }
